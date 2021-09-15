@@ -45,6 +45,9 @@ import Onboarding from 'react-native-onboarding-swiper'
 import { observable, configure, action, computed, makeAutoObservable, runInAction } from 'mobx'
 import { observer, Provider as MobxProvider } from 'mobx-react-lite'
 
+import EventCalendar from './EventCalendar/EventCalendar'
+
+
 // for mobx state, ensure it changes only with action method
 // never directly outside actions
 configure({ enforceActions: true })
@@ -57,6 +60,7 @@ class ApplicationState {
   username = ''
   email = ''
   profile = {}
+  headerColor = ''
   showOnboarding = true // unless we have already run!
   clients = []
   // client state, and schedule/roster and invoices
@@ -350,13 +354,13 @@ const MainScreen = observer(({ navigation }) => {
         // You can return any component that you like here!
         return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
       },
-      // headerStyle: {
-      //   backgroundColor: '#1a77ff',
-      // },
-      // headerTintColor: '#fff',
-      // headerTitleStyle: {
-      //   fontWeight: 'bold',
-      // },
+      headerStyle: {
+        backgroundColor: '#6200ee',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
     })}>
     <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Roster" component={RosterScreen} />
@@ -366,7 +370,7 @@ const MainScreen = observer(({ navigation }) => {
   )
 })
 
-const LeftContent = props => <Avatar.Icon {...props} icon='id-card' />
+
 
 const LoginForm = observer(() => {
   
@@ -505,6 +509,8 @@ const ProfileScreen = observer(({ navigation }) => {
     await app.loadProfile()
     setLoading(false)
   }, [])
+  
+  const LeftContent = props => <Avatar.Icon {...props} color='#03dac4' backgroundColor='white' size={64} icon='id-card' />
 
   return (
     <View style={styles.container}>
@@ -513,19 +519,19 @@ const ProfileScreen = observer(({ navigation }) => {
       )}
       { !loading && app.authenticated && (
       <Card style={{ elevation: 5, width: ScreenWidth - 40, borderRadius: 10, alignSelf: 'center' }}>
-      <Card.Title title="Profile" left={LeftContent} />
+      <Card.Title title="Profile" titleStyle={{ color: '#6200ee', fontSize: 30, marginTop: 10, marginLeft: 20 }} left={LeftContent} />
       <Card.Content>
-        <Text h4 style={styles.headerColor}>Business Name</Text>
+        <Text h5 style={styles.headerColor}>Business Name</Text>
         <Paragraph>{ app.profile.business }</Paragraph>
-        <Text h4 style={styles.headerColor}>ABN</Text>
+        <Text h5 style={styles.headerColor}>ABN</Text>
         <Paragraph>{ app.profile.abn }</Paragraph>
-        <Text h4 style={styles.headerColor}>Address</Text>
+        <Text h5 style={styles.headerColor}>Address</Text>
         <Paragraph>{ app.profile.address }</Paragraph>
-        <Text h4 style={styles.headerColor}>Suburb</Text>
+        <Text h5 style={styles.headerColor}>Suburb</Text>
         <Paragraph>{ app.profile.suburb }</Paragraph>
-        <Text h4 style={styles.headerColor}>State</Text>
+        <Text h5 style={styles.headerColor}>State</Text>
         <Paragraph>{ app.profile.state }</Paragraph>
-        <Text h4 style={styles.headerColor}>Postcode</Text>
+        <Text h5 style={styles.headerColor}>Postcode</Text>
         <Paragraph>{ app.profile.postcode }</Paragraph>
       </Card.Content>
       <Card.Actions>
@@ -559,12 +565,30 @@ const HomeScreen = observer(({ navigation }) => {
   )
 })
 
+const events = [
+  { start: '2021-09-07 00:30:00', end: '2021-09-07 01:30:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-07 01:30:00', end: '2021-09-07 02:20:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-07 04:10:00', end: '2021-09-07 04:40:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-07 01:05:00', end: '2021-09-07 01:45:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-07 14:30:00', end: '2021-09-07 16:30:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-08 01:20:00', end: '2021-09-08 02:20:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-08 04:10:00', end: '2021-09-08 04:40:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-08 00:45:00', end: '2021-09-08 01:45:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-08 11:30:00', end: '2021-09-08 12:30:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-09 01:30:00', end: '2021-09-09 02:00:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-09 03:10:00', end: '2021-09-09 03:40:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
+  { start: '2021-09-09 00:10:00', end: '2021-09-09 01:45:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' }
+]
+
 const RosterScreen = observer(({ navigation }) => {
   const app = useContext(ApplicationContext)
   return (
-    <View style={styles.container}>
-      <Text h3>Roster</Text>
-    </View>
+    app.authenticated && <EventCalendar
+      eventTapped={(event) => console.log(`Event tap: ${JSON.stringify(event)}`)}
+      events={events}
+      width={ScreenWidth}
+      initDate={'2021-09-08'}
+    />
   )
 })
 
@@ -614,7 +638,7 @@ const ClientScreen = observer(({ navigation }) => {
   const renderItem = ({ item }) => {
 
     const backgroundColor = item.id === selectedId ? '#03dac4' : '#f6f6f6';
-    const color = item.id === selectedId ? 'white' : 'black';
+    const color = item.id === selectedId ? '#fff' : '#000';
 
     return (
       <TouchableOpacity onPress={() => setSelectedId(item.id)}>
@@ -622,8 +646,10 @@ const ClientScreen = observer(({ navigation }) => {
         title={item.name}
         description={item.email}
         key={item.id}
-        style={{ width: ScreenWidth - 40, color: color, backgroundColor: backgroundColor }}
-        left={props => <Avatar.Text label={getTitle(item.name)} size={32} style={{ alignSelf: 'center' }} />}
+        style={{ width: ScreenWidth, paddingLeft: 20, backgroundColor: backgroundColor }}
+        titleStyle={{ color: color }}
+        descriptionStyle={{ color: color }}
+        left={props => <Avatar.Text label={getTitle(item.name)} size={42} style={{ alignSelf: 'center' }} />}
       />
       </TouchableOpacity>
     )
@@ -729,10 +755,9 @@ const InvoiceScreen = observer(({ navigation }) => {
 const App = observer(() => {
 
   const app = useContext(ApplicationContext)
-
-  const [isThemeDark, setIsThemeDark] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
 
+  const [isThemeDark, setIsThemeDark] = React.useState(false)
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme
 
   const toggleTheme = React.useCallback(() => {
@@ -748,17 +773,6 @@ const App = observer(() => {
   )
 
   useEffect(async () => {
-    // // Run once
-    // try {
-    //   await app.loadTokenFromAsyncStorage()
-    //   // logs us in automagically
-    // }
-    // catch (error) {
-    //   // Neaky login and save token and stuff!
-    //   let result = await app.login('jamesyoung1337@outlook.com', 'netcons')
-    // }
-
-    // console.log(app)
 
     let result
 
@@ -780,6 +794,10 @@ const App = observer(() => {
       // error trying to load from async storage (encrypted)
     }
 
+    action(() => {
+      app.headerColor = theme.colors.primary
+    })
+
     console.log(`In app useEffect`)
     
   }, [])
@@ -790,7 +808,16 @@ const App = observer(() => {
         <PreferencesContext.Provider value={preferences}>
         <PaperProvider theme={theme} settings={{ icon: props => <Icon {...props} /> }}>
           <NavigationContainer theme={theme}>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Navigator screenOptions={{
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: '#6200ee'
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}>
             { app.showOnboarding && (
               <Stack.Screen name="Wizard" component={OnboardingScreen} />
             )}
@@ -815,8 +842,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
-    height: ScreenHeight - 50
+    marginTop: 0,
+    height: ScreenHeight
   },
   containerLeft: {
     flex: 1,
@@ -827,7 +854,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   headerColor: {
-    color: '#f62252'
+    color: '#03dac4',
+    fontWeight: 'bold'
   },
   form: {
     alignItems: 'center',
