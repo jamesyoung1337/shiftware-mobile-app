@@ -35,7 +35,7 @@ export default class DayView extends React.PureComponent {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps (nextProps) {
     const width = nextProps.width - LEFT_MARGIN
     this.setState({
       packedEvents: populateEvents(nextProps.events, width)
