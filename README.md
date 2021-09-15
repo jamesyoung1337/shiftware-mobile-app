@@ -25,3 +25,7 @@ In another terminal:
 ```
 $ yarn android | npm android
 ```
+
+### iOS / iPhone
+
+This may run on iOS/iPhone.  I don't have a Mac to compile and test with, so if you do and you'd like to give it a try, please let me know how it goes!
