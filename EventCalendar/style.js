@@ -40,9 +40,9 @@ export default function styleConstructor (
     },
     event: {
       position: 'absolute',
-      backgroundColor: '#F0F4FF',
+      backgroundColor: '#acfff7',
       opacity: 0.8,
-      borderColor: '#DDE5FD',
+      borderColor: '#03dac4',
       borderWidth: 1,
       borderRadius: 5,
       paddingLeft: 4,
@@ -56,7 +56,7 @@ export default function styleConstructor (
       ...theme.event
     },
     eventTitle: {
-      color: '#615B73',
+      color: '#007f71',
       fontWeight: '600',
       minHeight: 15,
       ...theme.eventTitle
