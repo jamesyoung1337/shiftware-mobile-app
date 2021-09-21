@@ -45,34 +45,94 @@ import Onboarding from 'react-native-onboarding-swiper'
 import { observable, configure, action, computed, makeAutoObservable, runInAction } from 'mobx'
 import { observer, Provider as MobxProvider } from 'mobx-react-lite'
 
-import EventCalendar from '../EventCalendar/EventCalendar'
+import { Agenda } from 'react-native-calendars'
 
 import { ApplicationContext } from '../Context/Context'
 
-const events = [
-    { start: '2021-09-07 00:30:00', end: '2021-09-07 01:30:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-07 01:30:00', end: '2021-09-07 02:20:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-07 04:10:00', end: '2021-09-07 04:40:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-07 01:05:00', end: '2021-09-07 01:45:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-07 14:30:00', end: '2021-09-07 16:30:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-08 01:20:00', end: '2021-09-08 02:20:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-08 04:10:00', end: '2021-09-08 04:40:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-08 00:45:00', end: '2021-09-08 01:45:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-08 11:30:00', end: '2021-09-08 12:30:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-09 01:30:00', end: '2021-09-09 02:00:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-09 03:10:00', end: '2021-09-09 03:40:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' },
-    { start: '2021-09-09 00:10:00', end: '2021-09-09 01:45:00', title: 'Dr. Mariana Joseph', summary: '3412 Piedmont Rd NE, GA 3032' }
-]
-  
+import moment from 'moment'
+
+const LeftContent = props => <Avatar.Icon {...props} color='#03dac4' backgroundColor='white' size={32} style={{ marginTop: 10 }} icon='id-card' />
+
 const RosterScreen = observer(({ navigation }) => {
     const app = useContext(ApplicationContext)
     return (
-      app.authenticated && <EventCalendar
-        eventTapped={(event) => console.log(`Event tap: ${JSON.stringify(event)}`)}
-        events={events}
-        width={ScreenWidth}
-        initDate={'2021-09-08'}
-      />
+      <Agenda
+        // The list of items that have to be displayed in agenda. If you want to render item as empty date
+        // the value of date key has to be an empty array []. If there exists no value for date key it is
+        // considered that the date in question is not yet loaded
+        items={app.shifts}
+        // Callback that gets called when items for a certain month should be loaded (month became visible)
+        loadItemsForMonth={(month) => {console.log('trigger items loading')}}
+        // Callback that fires when the calendar is opened or closed
+        onCalendarToggled={(calendarOpened) => {console.log(calendarOpened)}}
+        // Callback that gets called on day press
+        onDayPress={(day)=>{
+          // console.log(day)
+          // console.log(JSON.stringify(app.shifts, null, 2))
+        }}
+        // Callback that gets called when day changes while scrolling agenda list
+        onDayChange={(day)=>{
+          console.log('day changed')
+          // setDay(day)
+        }}
+        // Initially selected day
+        selected={moment().toDate().toUTCString()}
+        // Max amount of months allowed to scroll to the past. Default = 50
+        pastScrollRange={12}
+        // Max amount of months allowed to scroll to the future. Default = 50
+        futureScrollRange={12}
+        // Specify how each item should be rendered in agenda
+        // Item is an object, firstItemInDay is boolean - true or false
+        renderItem={(item, firstItemInDay) => {
+          // console.log(item)
+          const shift_date = moment(item.shift_start).format('YYYY-MM-DD')
+          const card_title = shift_date + ' ' + item.description
+          return (
+            <View style={styles.container}>
+              <Card style={{ elevation: 5, width: ScreenWidth - 40, borderRadius: 10, alignSelf: 'center' }}>
+              <Card.Title title={card_title} titleStyle={{ color: '#6200ee', fontSize: 16, marginTop: 10, marginLeft: 20 }} left={LeftContent} />
+                <Card.Content>
+                  <Paragraph>
+                    Client: {item.client.name}
+                  </Paragraph>
+                  <Paragraph>
+                  {item.formatted_start} - {item.formatted_end}
+                  </Paragraph>
+                </Card.Content>
+              </Card>
+            </View>
+          )
+        }}
+        // Specify how each date should be rendered. day can be undefined if the item is not first in that day.
+        renderDay={(day, item) => {return (<View />);}}
+        // Specify how empty date content with no items should be rendered
+        renderEmptyDate={() => {return (<View />);}}
+        // Specify how agenda knob should look like
+        renderKnob={() => {return (<View />);}}
+        // Specify what should be rendered instead of ActivityIndicator
+        renderEmptyData = {() => {return (<View />);}}
+        // Specify your item comparison function for increased performance
+        rowHasChanged={(r1, r2) => { return r1.client_id === r2.client_id }}
+        // Hide knob button. Default = false
+        hideKnob={false}
+        // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
+        disabledByDefault={false}
+        // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
+        onRefresh={() => console.log('refreshing...')}
+        // Set this true while waiting for new data from a refresh
+        refreshing={false}
+        // Add a custom RefreshControl component, used to provide pull-to-refresh functionality for the ScrollView.
+        refreshControl={null}
+        // Agenda theme
+        theme={{
+            agendaDayTextColor: 'yellow',
+            agendaDayNumColor: 'green',
+            agendaTodayColor: 'red',
+            agendaKnobColor: 'blue'
+        }}
+        // Agenda container style
+        style={{}}
+        />
     )
 })
 
@@ -119,6 +179,6 @@ const styles = StyleSheet.create({
       marginRight: 20,
       alignItems: 'center',
     }
-  })
+})
 
-export { RosterScreen, events }
+export { RosterScreen }

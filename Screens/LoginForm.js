@@ -55,10 +55,28 @@ const LoginForm = observer(() => {
     const [visible, setVisible] = React.useState(false)
     const onToggleSnackBar = () => setVisible(!visible)
     const onDismissSnackBar = () => setVisible(false)
+    const [loginFailed, setLoginFailed] = React.useState(false)
   
     React.useEffect(async () => {
       console.log(`useEffect of LoginForm`)
+
+      console.log(JSON.stringify(app, null, 2))
     }, [])
+
+    const login = async (values) => {
+        // console.log(values)
+        setLoading(true)
+        let rc = await app.login(values.email, values.password)
+        if (!rc) {
+            setLoginFailed(true)
+            // onToggleSnackBar()
+            console.log(`Could not login: ${rc}`)
+        }
+        setLoading(false)
+        if (!loginFailed) {
+          console.log(JSON.stringify(app, null, 2))
+        }
+    }
   
     return (
       <>
@@ -70,14 +88,7 @@ const LoginForm = observer(() => {
         <Formik
           initialValues={{ email: '', password: '' }}
           onSubmit={ async (values) => {
-            // console.log(values)
-            setLoading(true)
-            app.login(values.email, values.password).then(() => {
-              setLoading(false)
-            })
-            .catch((e) => {
-              setVisible(true)
-            })
+            await login(values)
           }}
           >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -127,33 +138,6 @@ const LoginForm = observer(() => {
           )}
         </Formik>
       )}
-  
-      {/* { !loading && app.authenticated && (
-        <Card style={{ elevation: 5, width: ScreenWidth - 40, borderRadius: 10, alignSelf: 'center' }}>
-        <Card.Title title="Profile" left={LeftContent} />
-        <Card.Content>
-          <Text h4 style={styles.headerColor}>Business Name</Text>
-          <Paragraph>{ app.profile.business }</Paragraph>
-          <Text h4 style={styles.headerColor}>ABN</Text>
-          <Paragraph>{ app.profile.abn }</Paragraph>
-          <Text h4 style={styles.headerColor}>Address</Text>
-          <Paragraph>{ app.profile.address }</Paragraph>
-          <Text h4 style={styles.headerColor}>Suburb</Text>
-          <Paragraph>{ app.profile.suburb }</Paragraph>
-          <Text h4 style={styles.headerColor}>State</Text>
-          <Paragraph>{ app.profile.state }</Paragraph>
-          <Text h4 style={styles.headerColor}>Postcode</Text>
-          <Paragraph>{ app.profile.postcode }</Paragraph>
-        </Card.Content>
-        <Card.Actions>
-          <MaterialButton onPress={async () => {
-            setLoading(true)
-            await app.logout()
-            setLoading(false)
-            }}>Clear Session</MaterialButton>
-        </Card.Actions>
-        </Card>
-      )} */}
   
       </View>
   

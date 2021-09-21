@@ -47,6 +47,13 @@ import { observer, Provider as MobxProvider } from 'mobx-react-lite'
 
 import { ApplicationContext } from '../Context/Context'
 
+import ClientScreen from './ClientScreen'
+import OnboardingScreen from './OnboardingScreen'
+import LoginForm from './LoginForm'
+import ProfileScreen from './ProfileScreen'
+import { RosterScreen, events } from './RosterScreen'
+import InvoiceScreen from './InvoiceScreen'
+
 
 // Login or show profile
 const HomeScreen = observer(({ navigation }) => {
@@ -55,13 +62,16 @@ const HomeScreen = observer(({ navigation }) => {
     
     React.useEffect(async () => {
       console.log(`useEffect of HomeScreen`)
-      console.log(app)
+      // console.log(app)
     }, [])
     
     return (
       <View style={styles.container}>
-        { !app.authenticated && <LoginForm /> }
-        { app.authenticated && <ProfileScreen /> }
+        <ProfileScreen />
+        <Button onPress={async () => { 
+          await app.logout()
+          navigation.navigate('Login')
+        }} title='Logout' containerStyle={{ marginBottom: 20 }} />
       </View>
     )
 })

@@ -47,13 +47,23 @@ import { observer, Provider as MobxProvider } from 'mobx-react-lite'
 
 import { ApplicationContext } from '../Context/Context'
 
+import ClientScreen from './ClientScreen'
+import OnboardingScreen from './OnboardingScreen'
+import LoginForm from './LoginForm'
+import ProfileScreen from './ProfileScreen'
+import HomeScreen from './HomeScreen'
+import { RosterScreen, events } from './RosterScreen'
+import InvoiceScreen from './InvoiceScreen'
+
 const Tab = createBottomTabNavigator()
+
 
 const MainScreen = observer(({ navigation }) => {
   
     const app = useContext(ApplicationContext)
   
     return (
+      app.authenticated && (
       <Tab.Navigator screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -84,6 +94,7 @@ const MainScreen = observer(({ navigation }) => {
       <Tab.Screen name="Clients" component={ClientScreen} />
       <Tab.Screen name="Invoices" component={InvoiceScreen} />
     </Tab.Navigator>
+    )
     )
 })
 

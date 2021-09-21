@@ -45,7 +45,7 @@ import Onboarding from 'react-native-onboarding-swiper'
 import { observable, configure, action, computed, makeAutoObservable, runInAction } from 'mobx'
 import { observer, Provider as MobxProvider } from 'mobx-react-lite'
 
-import ApplicationState from '../State/ApplicationState'
+import { ApplicationContext } from '../Context/Context'
 
 const ClientScreen = observer(({ navigation }) => {
 
@@ -112,7 +112,7 @@ const ClientScreen = observer(({ navigation }) => {
   
     return (
       <View style={styles.clientView}>
-        <Portal>
+        { !loading && ( <Portal>
           <Formik
             initialValues={{ name: '', email: '' }}
             onSubmit={async (values) => {
@@ -174,7 +174,7 @@ const ClientScreen = observer(({ navigation }) => {
             </Dialog>
             )}
             </Formik>
-        </Portal>
+        </Portal> )}
         { loading && (
           <ActivityIndicator animating={true} color={Colors.green500} />
         )}
@@ -196,6 +196,51 @@ const ClientScreen = observer(({ navigation }) => {
         />
       </View>
     )
+})
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 20,
+    },
+    clientView: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 0,
+      height: ScreenHeight
+    },
+    containerLeft: {
+      flex: 1,
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+      width: ScreenWidth - 40,
+      marginLeft: 20,
+      marginRight: 20,
+    },
+    headerColor: {
+      color: '#03dac4',
+      fontWeight: 'bold'
+    },
+    form: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 300
+    },
+    fab: {
+      position: 'absolute',
+      margin: 16,
+      right: 0,
+      bottom: 0,
+    },
+    dialog: {
+      width: ScreenWidth - 40,
+      marginLeft: 20,
+      marginRight: 20,
+      alignItems: 'center',
+    }
 })
 
 export default ClientScreen

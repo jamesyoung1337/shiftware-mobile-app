@@ -52,7 +52,8 @@ import MainScreen from './Screens/MainScreen'
 import LoginForm from './Screens/LoginForm'
 import ProfileScreen from './Screens/ProfileScreen'
 import HomeScreen from './Screens/HomeScreen'
-import RosterScreen from './Screens/RosterScreen'
+import { RosterScreen, events } from './Screens/RosterScreen'
+import InvoiceScreen from './Screens/InvoiceScreen'
 
 import { ApplicationContext, PreferencesContext } from './Context/Context'
 
@@ -88,24 +89,26 @@ const App = observer(() => {
 
   useEffect(async () => {
 
-    let result
-
     try {
-      result = await app.loadTokenFromAsyncStorage()
+      let result = await app.loadTokenFromAsyncStorage()
       console.log(`result from loadTokenFromAsyncStorage: ${result}`)
 
-      if (result === null) {
+      const rc = await app.invalidToken(result)
+
+      if (rc) {
+        console.log(`Invalid saved token, logging in again`)
         try {
-          result = await app.login('jamesyoung1337@outlook.com', 'netcons')
-          console.log(`result from login: ${result}`)
+          result = await app.login('me@jamesyoung.info', 'bella')
         }
         catch (error) {
           // cannot login!?
+          console.log(`Failed to log in: invalid password?`)
         }
       }
     }
     catch (error) {
       // error trying to load from async storage (encrypted)
+      console.log(`Could not load log in token?!`)
     }
 
     action(() => {
@@ -135,7 +138,8 @@ const App = observer(() => {
             { app.showOnboarding && (
               <Stack.Screen name="Wizard" component={OnboardingScreen} />
             )}
-            <Stack.Screen name="Main" component={MainScreen} />
+            { app.authenticated && (<Stack.Screen name="Main" component={MainScreen} /> )}
+            { !app.authenticated && ( <Stack.Screen name="Login" component={LoginForm} /> )}
           </Stack.Navigator>
         </NavigationContainer>
         </PaperProvider>

@@ -8,13 +8,13 @@ import {
 } from 'react-native'
 import _ from 'lodash'
 import moment from 'moment'
-import React from 'react'
+import React, { PureComponent } from 'react'
 
 import styleConstructor from './style'
 
 import DayView from './DayView'
 
-export default class EventCalendar extends React.Component {
+export default class EventCalendar extends React.PureComponent {
   constructor(props) {
     super(props)
     this.styles = styleConstructor(props.styles)

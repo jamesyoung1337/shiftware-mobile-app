@@ -47,8 +47,6 @@ import { observer, Provider as MobxProvider } from 'mobx-react-lite'
 
 import { ApplicationContext } from '../Context/Context'
 
-
-
 const ProfileScreen = observer(({ navigation }) => {
   
     const app = useContext(ApplicationContext)
@@ -58,7 +56,21 @@ const ProfileScreen = observer(({ navigation }) => {
       console.log(`useEffect of ProfileScreen`)
   
       setLoading(true)
-      await app.loadProfile()
+      try {
+          await app.loadProfile()
+      }
+      catch (err) {
+        setLoading(false)
+        return
+      }
+
+      try {
+        let shifts = await app.loadShiftsForCalendar()
+      }
+      catch (error) {
+        console.log(error)
+      }
+      
       setLoading(false)
     }, [])
     
@@ -69,7 +81,7 @@ const ProfileScreen = observer(({ navigation }) => {
         { loading && (
           <ActivityIndicator animating={true} color={Colors.green500} />
         )}
-        { !loading && app.authenticated && (
+        { !loading && (
         <Card style={{ elevation: 5, width: ScreenWidth - 40, borderRadius: 10, alignSelf: 'center' }}>
         <Card.Title title="Profile" titleStyle={{ color: '#6200ee', fontSize: 30, marginTop: 10, marginLeft: 20 }} left={LeftContent} />
         <Card.Content>
@@ -86,13 +98,17 @@ const ProfileScreen = observer(({ navigation }) => {
           <Text h5 style={styles.headerColor}>Postcode</Text>
           <Paragraph>{ app.profile.postcode }</Paragraph>
         </Card.Content>
-        <Card.Actions>
+        {/* <Card.Actions>
           <MaterialButton onPress={async () => {
             setLoading(true)
             // Clear session/reload/whatever?
+            try {
+              await app.logout(true)
+            }
+            catch (err) { }
             setLoading(false)
             }}>Clear Session</MaterialButton>
-        </Card.Actions>
+        </Card.Actions> */}
         </Card>
       )}
       </View>
