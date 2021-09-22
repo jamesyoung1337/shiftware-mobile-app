@@ -49,6 +49,8 @@ import ApplicationState from '../State/ApplicationState'
 
 import { ApplicationContext, PreferencesContext } from '../Context/Context'
 
+import LoginForm from './LoginForm'
+
 const OnboardingScreen = observer(({ navigation }) => {
     const app = useContext(ApplicationContext)
   
@@ -108,7 +110,7 @@ const OnboardingScreen = observer(({ navigation }) => {
                   // remove showOnboarding
                   // why can I do this outside an action with strict mode??
                   app.showOnboarding = false
-                  navigation.navigate('Main')
+                  navigation.navigate('Login')
                 }}
               />
             ),
