@@ -62,8 +62,8 @@ const OnboardingScreen = observer(({ navigation }) => {
         onSkip={() => Alert.alert('Skipped')}
         pages={[
           {
-            title: 'Hey!',
-            subtitle: 'Welcome to $App!',
+            title: 'Welcome to Shiftware!',
+            subtitle: 'An app especially for NDIS providers,\nyou can import spreadsheets of shift types and prices',
             backgroundColor: '#003c8f',
             image: (
               <ElementsIcon
@@ -75,12 +75,12 @@ const OnboardingScreen = observer(({ navigation }) => {
             ),
           },
           {
-            title: 'Send Messages',
-            subtitle: 'You can reach everybody with us',
+            title: 'Manage Shifts',
+            subtitle: 'An integrated shift calendar makes it much easier',
             backgroundColor: '#5e92f3',
             image: (
               <ElementsIcon
-                name="paper-plane-o"
+                name="calendar-check-o"
                 type="font-awesome"
                 size={100}
                 color="white"
@@ -88,15 +88,15 @@ const OnboardingScreen = observer(({ navigation }) => {
             ),
           },
           {
-            title: 'Get Notified',
-            subtitle: 'We will send you notification as soon as something happened',
+            title: 'Raise Invoices',
+            subtitle: 'Create an invoice, add shifts for a selected client, send!',
             backgroundColor: '#1565c0',
             image: (
-              <ElementsIcon name="bell-o" type="font-awesome" size={100} color="white" />
+              <ElementsIcon name="file-invoice" type="font-awesome-5" size={100} color="white" />
             ),
           },
           {
-            title: "That's Enough",
+            title: "Ready to get started?",
             subtitle: (
               <Button
                 title={'Get Started'}

@@ -89,27 +89,27 @@ const App = observer(() => {
 
   useEffect(async () => {
 
-    try {
-      let result = await app.loadTokenFromAsyncStorage()
-      console.log(`result from loadTokenFromAsyncStorage: ${result}`)
+    // try {
+    //   let result = await app.loadTokenFromAsyncStorage()
+    //   console.log(`result from loadTokenFromAsyncStorage: ${result}`)
 
-      const rc = await app.invalidToken(result)
+    //   const rc = await app.invalidToken(result)
 
-      if (rc) {
-        console.log(`Invalid saved token, logging in again`)
-        try {
-          result = await app.login('me@jamesyoung.info', 'bella')
-        }
-        catch (error) {
-          // cannot login!?
-          console.log(`Failed to log in: invalid password?`)
-        }
-      }
-    }
-    catch (error) {
-      // error trying to load from async storage (encrypted)
-      console.log(`Could not load log in token?!`)
-    }
+    //   if (rc) {
+    //     console.log(`Invalid saved token, logging in again`)
+    //     try {
+    //       result = await app.login('me@jamesyoung.info', 'bella')
+    //     }
+    //     catch (error) {
+    //       // cannot login!?
+    //       console.log(`Failed to log in: invalid password?`)
+    //     }
+    //   }
+    // }
+    // catch (error) {
+    //   // error trying to load from async storage (encrypted)
+    //   console.log(`Could not load log in token?!`)
+    // }
 
     action(() => {
       app.headerColor = theme.colors.primary

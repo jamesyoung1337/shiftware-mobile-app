@@ -172,7 +172,7 @@ class ApplicationState {
           // All these times are accidentally GMT/UTC+0, add 10 to approximate for now
           let start = moment(shift.shift_start).add(10, 'hours')
           let end = moment(shift.shift_end).add(10, 'hours')
-          
+
           console.log(start.format('YYYY-MM-DD HH:MM A'))
           console.log(end.format('YYYY-MM-DD HH:MM A'))
           let hours = end.diff(start, 'hours', false)

@@ -7,6 +7,14 @@ There are no guarantees it will compile and work at any particular commit.
 
 There are some hacks currently in the code for testing purposes, for example: a hard-coded login.  You can remove this code in the main `App` function's `useEffect()` to look at the onboarding process and the login screen.
 
+### Onboarding
+
+![Welcome](screenshots/onboarding1.png)
+![Welcome](screenshots/onboarding2.png)
+![Welcome](screenshots/onboarding3.png)
+![Welcome](screenshots/onboarding4.png)
+
+
 ### Screenshots (WIP)
 
 ![Login Screen](screenshots/1.jpg)
