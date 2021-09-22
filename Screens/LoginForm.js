@@ -59,13 +59,13 @@ const LoginForm = observer(() => {
   
     React.useEffect(async () => {
       console.log(`useEffect of LoginForm`)
-
-      console.log(JSON.stringify(app, null, 2))
+      // console.log(JSON.stringify(app, null, 2))
     }, [])
 
     const login = async (values) => {
-        // console.log(values)
         setLoading(true)
+        // clear all data when logging in
+        await app.logout(false)
         let rc = await app.login(values.email, values.password)
         if (!rc) {
             setLoginFailed(true)

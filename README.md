@@ -7,6 +7,17 @@ There are no guarantees it will compile and work at any particular commit.
 
 There are some hacks currently in the code for testing purposes, for example: a hard-coded login.  You can remove this code in the main `App` function's `useEffect()` to look at the onboarding process and the login screen.
 
+### Screenshots (WIP)
+
+![Login Screen](screenshots/1.jpg)
+![Profile](screenshots/2.jpg)
+![Roster #1](screenshots/3.jpg)
+![Roster #2](screenshots/4.jpg)
+![Clients](screenshots/5.jpg)
+![Add Client](screenshots/6.jpg)
+![Invoices](screenshots/7.jpg)
+
+
 ### Setup
 
 Follow the development environment setup recommended on the React Native website.

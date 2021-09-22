@@ -121,7 +121,7 @@ const InvoiceScreen = observer(({ navigation }) => {
       await loadData()
     }
     loadInvoiceData()
-  }, [])
+  }, [reload])
 
   const [selectedId, setSelectedId] = useState(null)
 
