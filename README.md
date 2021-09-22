@@ -13,9 +13,10 @@ There are some hacks currently in the code for testing purposes, for example: a 
 ![Profile](screenshots/2.jpg)
 ![Roster #1](screenshots/3.jpg)
 ![Roster #2](screenshots/4.jpg)
-![Clients](screenshots/5.jpg)
-![Add Client](screenshots/6.jpg)
-![Invoices](screenshots/7.jpg)
+![Roster #3](screenshots/5.jpg)
+![Clients](screenshots/6.jpg)
+![Add Client](screenshots/7.jpg)
+![Invoices](screenshots/8.jpg)
 
 
 ### Setup
