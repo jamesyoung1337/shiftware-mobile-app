@@ -55,6 +55,8 @@ import HomeScreen from './Screens/HomeScreen'
 import { RosterScreen, events } from './Screens/RosterScreen'
 import InvoiceScreen from './Screens/InvoiceScreen'
 
+import SplashScreen from 'react-native-splash-screen'
+
 import { ApplicationContext, PreferencesContext } from './Context/Context'
 
 // for mobx state, ensure it changes only with action method
@@ -89,6 +91,11 @@ const App = observer(() => {
 
   useEffect(async () => {
 
+    setTimeout(() => {
+      SplashScreen.hide()
+    }, 3000)
+    
+
     // try {
     //   let result = await app.loadTokenFromAsyncStorage()
     //   console.log(`result from loadTokenFromAsyncStorage: ${result}`)
@@ -117,7 +124,7 @@ const App = observer(() => {
 
     console.log(`In app useEffect`)
     
-  }, [])
+  })
 
   return (
     <SafeAreaProvider>
